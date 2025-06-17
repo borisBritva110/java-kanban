@@ -187,7 +187,7 @@ public class TaskManager {
 
         if (completedSubtasks == allSubtasksFromEpicById.size()) {
             epic.setTaskStatus(TaskStatus.DONE);
-        } else if (completedSubtasks > MIN_COMPLETED_SUBTASKS){
+        } else if (completedSubtasks > MIN_COMPLETED_SUBTASKS) {
             epic.setTaskStatus(TaskStatus.IN_PROGRESS);
         } else {
             epic.setTaskStatus(TaskStatus.NEW);
