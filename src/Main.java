@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import ru.common.manager.TaskManager;
+import ru.common.model.Epic;
+import ru.common.model.Subtask;
+import ru.common.model.Task;
+import ru.common.model.TaskStatus;
+
 public class Main {
     private static final String ERROR_TEXT_MESSAGE = "Команда не найдена";
 
@@ -69,8 +75,8 @@ public class Main {
                 System.out.println("Введите id");
                 entityId = scanner.nextInt();
                 Task taskById = manager.getTaskById(entityId);
-                // Subtask subtaskById = manager.getSubtaskById(entityId);
-                // Epic epicById = manager.getEpicById(entityId);
+                // ru.common.model.Subtask subtaskById = manager.getSubtaskById(entityId);
+                // ru.common.model.Epic epicById = manager.getEpicById(entityId);
             } else if (command == 4) {
                 System.out.println("Какой тип задачи необходимо создать? 1 - задача, 2 - подзадача, 3 - эпик");
                 Task task3 = new Task("Тестовая задача", "Просто задача", TaskStatus.DONE);

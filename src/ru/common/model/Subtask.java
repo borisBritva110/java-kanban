@@ -1,19 +1,19 @@
-import java.util.ArrayList;
+package ru.common.model;
 
-public class Epic extends Task {
-    private ArrayList<Integer> subtaskIds;
+public class Subtask extends Task {
+    private int epicId;
 
-    public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
-        subtaskIds = new ArrayList<>();
+    public Subtask(int epicId, String name, String description, TaskStatus status) {
+        super(name, description, status);
+        this.epicId = epicId;
     }
 
-    public ArrayList<Integer> getSubtaskIds() {
-        return subtaskIds;
+    public int getEpicId() {
+        return epicId;
     }
 
-    public void setSubtaskIds(ArrayList<Integer> subtaskIds) {
-        this.subtaskIds = subtaskIds;
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     @Override

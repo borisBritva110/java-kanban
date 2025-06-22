@@ -1,5 +1,12 @@
+package ru.common.manager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import ru.common.model.Epic;
+import ru.common.model.Subtask;
+import ru.common.model.Task;
+import ru.common.model.TaskStatus;
 
 public class TaskManager {
     private static final int MIN_COMPLETED_SUBTASKS = 1;
@@ -54,6 +61,7 @@ public class TaskManager {
     public void deleteAllSubtasks() {
         subtasks.clear();
         for (Epic epic : epics.values()) {
+            epic.setSubtaskIds(new ArrayList<>());
             epic.setTaskStatus(TaskStatus.NEW);
             System.out.println("Статус эпика с id=" + epic.getId() + " изменен на NEW");
         }
