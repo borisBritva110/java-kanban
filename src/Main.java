@@ -25,8 +25,11 @@ public class Main {
         Subtask subtask = new Subtask(epic.getId(), "Подзадача3", "TEST3", TaskStatus.NEW);
         manager.createSubtask(subtask);
 
-        Subtask subtask2 = new Subtask(epic2.getId(), "Подзадача4", "TEST4", TaskStatus.NEW);
+        Subtask subtask2 = new Subtask(epic.getId(), "Подзадача4", "TEST4", TaskStatus.IN_PROGRESS);
         manager.createSubtask(subtask2);
+
+        Subtask subtask3 = new Subtask(epic.getId(), "Подзадача", "TEST4", TaskStatus.NEW);
+        manager.createSubtask(subtask3);
 
         printMenu();
 
@@ -75,16 +78,16 @@ public class Main {
                 System.out.println("Введите id");
                 entityId = scanner.nextInt();
                 Task taskById = manager.getTaskById(entityId);
-                // ru.common.model.Subtask subtaskById = manager.getSubtaskById(entityId);
-                // ru.common.model.Epic epicById = manager.getEpicById(entityId);
+                // Subtask subtaskById = manager.getSubtaskById(entityId);
+                // Epic epicById = manager.getEpicById(entityId);
             } else if (command == 4) {
                 System.out.println("Какой тип задачи необходимо создать? 1 - задача, 2 - подзадача, 3 - эпик");
                 Task task3 = new Task("Тестовая задача", "Просто задача", TaskStatus.DONE);
                 manager.createTask(task3);
                 Epic epic3 = new Epic("Тестовый эпик", "");
                 manager.createEpic(epic3);
-                Subtask subtask3 = new Subtask(epic3.getId(), "Подзадача", "", TaskStatus.IN_PROGRESS);
-                manager.createSubtask(subtask3);
+                // Subtask subtask3 = new Subtask(epic3.getId(), "Подзадача", "", TaskStatus.IN_PROGRESS);
+                // manager.createSubtask(subtask3);
             } else if (command == 5) {
                 System.out.println("Какого типа задачу необходимо отредактировать? 1 - задача, 2 - подзадача, 3 - эпик");
                 entityId = scanner.nextInt();

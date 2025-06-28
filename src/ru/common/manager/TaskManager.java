@@ -9,7 +9,6 @@ import ru.common.model.Task;
 import ru.common.model.TaskStatus;
 
 public class TaskManager {
-    private static final int MIN_COMPLETED_SUBTASKS = 1;
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
@@ -207,10 +206,15 @@ public class TaskManager {
 
         if (completedSubtasks == allSubtasksFromEpicById.size()) {
             epic.setTaskStatus(TaskStatus.DONE);
-        } else if (completedSubtasks > MIN_COMPLETED_SUBTASKS) {
-            epic.setTaskStatus(TaskStatus.IN_PROGRESS);
         } else {
-            epic.setTaskStatus(TaskStatus.NEW);
+            boolean hasSubtaskInProgress = allSubtasksFromEpicById.stream().anyMatch(
+                subtask -> subtask.getTaskStatus() == TaskStatus.IN_PROGRESS
+            );
+            if (!hasSubtaskInProgress) {
+                epic.setTaskStatus(TaskStatus.NEW);
+            } else {
+                epic.setTaskStatus(TaskStatus.IN_PROGRESS);
+            }
         }
     }
 }
