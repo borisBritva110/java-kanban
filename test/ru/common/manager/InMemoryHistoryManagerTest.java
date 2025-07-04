@@ -50,7 +50,7 @@ public class InMemoryHistoryManagerTest {
         assertEquals(task1, history.get(0), "Задачи не совпадают.");
         assertEquals(task2, history.get(1), "Задачи не совпадают.");
 
-        history.add(subTask);
+        historyManager.add(subTask);
         List<Task> updatedHistory = historyManager.getHistory();
         assertNotNull(history, "В истории отсутствуют задачи.");
         assertEquals(3, updatedHistory.size(), "Количество задач отличается.");

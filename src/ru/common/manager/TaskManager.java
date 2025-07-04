@@ -35,11 +35,11 @@ public interface TaskManager {
     void deleteEpicById(int id);
 
     // Создание
-    void createTask(Task task);
+    Task createTask(Task task);
 
-    void createSubtask(Subtask subtask);
+    Subtask createSubtask(Subtask subtask);
 
-    void createEpic(Epic epic);
+    Epic createEpic(Epic epic);
 
     // Обновление сущности
     void updateTask(Task newtTask, int id);

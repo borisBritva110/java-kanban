@@ -122,32 +122,40 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public Task createTask(Task task) {
         int entityId = id++;
         tasks.put(entityId, task);
         task.setId(entityId);
         System.out.println("Создана задача с id: " + entityId);
+        return task;
     }
 
     @Override
-    public void createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask) {
+        Epic epic = epics.get(subtask.getEpicId());
+        if (epic == null) {
+            System.out.println("Невозможно создать подзадачу вне эпика");
+            return null;
+        }
         int entityId = id++;
         subtasks.put(entityId, subtask);
         subtask.setId(entityId);
-        Epic epic = epics.get(subtask.getEpicId());
+
         if (!epic.getSubtaskIds().contains(entityId)) {
             epic.getSubtaskIds().add(entityId);
         }
         updateEpicStatus(epic);
         System.out.println("Создана подзадача с id: " + entityId);
+        return subtask;
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public Epic createEpic(Epic epic) {
         int entityId = id++;
         epics.put(entityId, epic);
         epic.setId(entityId);
         System.out.println("Создан эпик с id: " + entityId);
+        return epic;
     }
 
     @Override
@@ -220,25 +228,25 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        int completedSubtasks = 0;
+        boolean allNew = true;
+        boolean allDone = true;
+
         for (Subtask subtask : allSubtasksFromEpicById) {
-            if (subtask.getTaskStatus() == TaskStatus.DONE) {
-                completedSubtasks++;
+            if (subtask.getTaskStatus() != TaskStatus.NEW) {
+                allNew = allNew && (subtask.getTaskStatus() == TaskStatus.NEW);
+                allDone = allDone && (subtask.getTaskStatus() == TaskStatus.DONE);
             }
         }
 
-        if (completedSubtasks == allSubtasksFromEpicById.size()) {
+        if (allNew) {
+            epic.setTaskStatus(TaskStatus.NEW);
+        } else if (allDone) {
             epic.setTaskStatus(TaskStatus.DONE);
         } else {
-            boolean hasSubtaskInProgress = allSubtasksFromEpicById.stream().anyMatch(
-                subtask -> subtask.getTaskStatus() == TaskStatus.IN_PROGRESS
-            );
-            if (!hasSubtaskInProgress) {
-                epic.setTaskStatus(TaskStatus.NEW);
-            } else {
-                epic.setTaskStatus(TaskStatus.IN_PROGRESS);
-            }
+            epic.setTaskStatus(TaskStatus.IN_PROGRESS);
         }
+
+        System.out.println("Статус эпика с id=" + epic.getId() + " изменен на " + epic.getTaskStatus());
     }
 
     @Override

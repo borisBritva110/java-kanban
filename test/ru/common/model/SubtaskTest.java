@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ru.common.manager.InMemoryTaskManager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SubtaskTest {
 
@@ -55,8 +52,12 @@ public class SubtaskTest {
 
     @Test
     public void cannotAddSubtaskAsEpicToItself() {
-        Subtask invalidSubtask = new Subtask(subtask.getId(), "Новая подзадача", "Новая подзадача для теста", TaskStatus.NEW);
-        manager.createSubtask(invalidSubtask);
-        assertEquals(0, invalidSubtask.getEpicId());
+        Epic epic = new Epic("Эпик", "");
+        manager.createEpic(epic);
+        Subtask subtask = new Subtask(epic.getId(),"Подзадача", "", TaskStatus.NEW);
+        manager.createSubtask(subtask);
+        Subtask subtask2 = new Subtask(subtask.getId(), "Новая подзадача", "Новая подзадача для теста", TaskStatus.NEW);
+        Subtask invalidSubtask = manager.createSubtask(subtask2);
+        assertNull(invalidSubtask, "Подзадача может быть своим эпиком.");
     }
 }
