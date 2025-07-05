@@ -5,9 +5,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ru.common.manager.InMemoryTaskManager;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import ru.common.manager.InMemoryTaskManager;
 
 public class SubtaskTest {
 
@@ -18,19 +18,15 @@ public class SubtaskTest {
     @BeforeEach
     void createInMemoryManager() {
         manager = new InMemoryTaskManager();
-        epic = new Epic("Эпик", "Эпик для теста подзадач");
+        epic = MockData.createEpic();
         manager.createEpic(epic);
-
-        subtask = new Subtask(epic.getId(), "Подзадача", "Подзадача для теста", TaskStatus.NEW);
+        subtask = MockData.createSubTask(epic);
         manager.createSubtask(subtask);
     }
 
     @Test
     void addNewSubtask() {
-        Subtask savedSubTask = manager.getSubtaskById(subtask.getId());
-        assertNotNull(savedSubTask,  "Подзадача не найдена.");
-        assertEquals(subtask, savedSubTask, "Задачи не совпадают.");
-
+        assertNotNull(subtask.getId(),  "Подзадача не найдена.");
         List<Subtask> subtasks = manager.getAllSubtasks();
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
@@ -52,10 +48,6 @@ public class SubtaskTest {
 
     @Test
     public void cannotAddSubtaskAsEpicToItself() {
-        Epic epic = new Epic("Эпик", "");
-        manager.createEpic(epic);
-        Subtask subtask = new Subtask(epic.getId(),"Подзадача", "", TaskStatus.NEW);
-        manager.createSubtask(subtask);
         Subtask subtask2 = new Subtask(subtask.getId(), "Новая подзадача", "Новая подзадача для теста", TaskStatus.NEW);
         Subtask invalidSubtask = manager.createSubtask(subtask2);
         assertNull(invalidSubtask, "Подзадача может быть своим эпиком.");

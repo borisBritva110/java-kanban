@@ -3,6 +3,7 @@ package ru.common.manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.common.model.Epic;
 import ru.common.model.Subtask;
@@ -11,23 +12,23 @@ import ru.common.model.TaskStatus;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
     private static int id = 1;
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
 
@@ -192,7 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        ArrayList<Subtask> subtasksByEpic = getSubtasksFromEpic(epic);
+        List<Subtask> subtasksByEpic = getSubtasksFromEpic(epic);
         for (Subtask subtask : subtasksByEpic) {
             subtask.setEpicId(epic.getId());
         }
@@ -202,12 +203,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksFromEpic(Epic epic) {
+    public List<Subtask> getSubtasksFromEpic(Epic epic) {
         if (epic == null) {
             System.out.println("Эпик с id=" + epic.getId() + " не был найден");
             return null;
         }
-        ArrayList<Subtask> subtasksByEpic = new ArrayList<>();
+        List<Subtask> subtasksByEpic = new ArrayList<>();
         for (Subtask subtask : subtasks.values()) {
             if (subtask.getEpicId() == epic.getId()) {
                 subtasksByEpic.add(subtask);
@@ -221,7 +222,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Эпик не был найден");
             return;
         }
-        ArrayList<Subtask> allSubtasksFromEpicById = getSubtasksFromEpic(epic);
+        List<Subtask> allSubtasksFromEpicById = getSubtasksFromEpic(epic);
         if (allSubtasksFromEpicById.isEmpty()) {
             epic.setTaskStatus(TaskStatus.NEW);
             System.out.println("Статус эпика с id=" + epic.getId() + " изменен на NEW, так как отсутствуют подзадачи");

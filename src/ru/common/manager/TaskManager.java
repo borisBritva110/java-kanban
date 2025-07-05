@@ -1,6 +1,5 @@
 package ru.common.manager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.common.model.Epic;
@@ -9,11 +8,11 @@ import ru.common.model.Task;
 
 public interface TaskManager {
     // Получение
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
     Task getTaskById(int id);
 
@@ -50,5 +49,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    ArrayList<Subtask> getSubtasksFromEpic(Epic epic);
+    List<Subtask> getSubtasksFromEpic(Epic epic);
 }

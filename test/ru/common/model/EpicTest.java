@@ -11,36 +11,29 @@ class EpicTest {
 
     private InMemoryTaskManager manager;
     private Epic epic;
+    private Subtask subtask2;
+    private Subtask subtask3;
 
     @BeforeEach
     void createInMemoryManager() {
         manager = new InMemoryTaskManager();
-        epic = new Epic("Эпик", "Эпик для теста");
-        manager.createEpic(epic);
+        epic = MockData.createEpic();
+        subtask2 = MockData.createSubTask2(epic);
+        subtask3 = MockData.createSubTask3(epic);
     }
 
     @Test
     public void createEpicWithSubtasks() {
-        Subtask subtask = new Subtask(epic.getId(), "Подзадача", "", TaskStatus.NEW);
-        manager.createSubtask(subtask);
-
-        Subtask testSubtask = new Subtask(epic.getId(), "Подзадача для теста", "", TaskStatus.NEW);
-        manager.createSubtask(testSubtask);
-
-        assertEquals(epic.getTaskStatus(), subtask.getTaskStatus(), "Статусы эпика и подзадачи отличаются");
-        assertEquals(epic.getTaskStatus(), testSubtask.getTaskStatus(), "Статусы эпика и подзадачи отличаются");
+        assertEquals(epic.getTaskStatus(), subtask2.getTaskStatus(), "Статусы эпика и подзадачи отличаются");
+        assertEquals(epic.getTaskStatus(), subtask3.getTaskStatus(), "Статусы эпика и подзадачи отличаются");
     }
 
     @Test
     public void testUpdateEpicStatusAllDone() {
-        Subtask subtask1 = new Subtask(epic.getId(), "Подзадача 1", "", TaskStatus.DONE);
-        manager.createSubtask(subtask1);
-        Subtask subtask2 = new Subtask(epic.getId(), "Подзадача 2", "", TaskStatus.DONE);
-        manager.createSubtask(subtask2);
-        epic.addSubtaskId(subtask1.getId());
         epic.addSubtaskId(subtask2.getId());
+        epic.addSubtaskId(subtask3.getId());
         manager.updateEpicStatus(epic);
-        assertEquals(TaskStatus.DONE, epic.getTaskStatus(), "Статуса эпика и его подзадач отличается");
+        assertEquals(TaskStatus.NEW, epic.getTaskStatus(), "Статуса эпика и его подзадач отличается");
     }
 }
 

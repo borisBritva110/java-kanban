@@ -6,16 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ru.common.model.Epic;
+import ru.common.model.MockData;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
-import ru.common.model.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class InMemoryHistoryManagerTest {
 
-    private InMemoryHistoryManager historyManager;
+    private HistoryManager historyManager;
     private InMemoryTaskManager manager;
     private static Task task1;
     private Task task2;
@@ -24,12 +24,12 @@ public class InMemoryHistoryManagerTest {
 
     @BeforeEach
     void setUp() {
-        manager = new InMemoryTaskManager();
-        historyManager = new InMemoryHistoryManager();
-        task1 = new Task("Task 1", "Описание 1", TaskStatus.NEW);
-        task2 = new Task("Task 2", "Описание 2", TaskStatus.NEW);
-        epic = new Epic("Epic ", "Описание");
-        subTask = new Subtask(epic.getId(), "SubTask", "Описание", TaskStatus.NEW);
+        this.manager = Managers.getDefault();
+        this.historyManager = Managers.getDefaultHistory();
+        task1 = MockData.createTask1();
+        task2 = MockData.createTask2();
+        epic = MockData.createEpic();
+        subTask = MockData.createSubTask(epic);
     }
 
     @Test
@@ -79,9 +79,7 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     public void canAddSameTasksToTheHistory() {
-        Task task1 = new Task("Задача", "Описание 1", TaskStatus.NEW);
         manager.createTask(task1);
-        Task task2 = new Task("Задача", "Описание 2", TaskStatus.NEW);
         manager.createTask(task2);
 
         manager.getTaskById(task1.getId());

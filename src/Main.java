@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,15 +44,15 @@ public class Main {
                 choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        ArrayList<Task> tasks = manager.getAllTasks();
+                        List<Task> tasks = manager.getAllTasks();
                         System.out.println(tasks);
                         break;
                     case 2:
-                        ArrayList<Subtask> subtasks = manager.getAllSubtasks();
+                        List<Subtask> subtasks = manager.getAllSubtasks();
                         System.out.println(subtasks);
                         break;
                     case 3:
-                        ArrayList<Epic> epics = manager.getAllEpics();
+                        List<Epic> epics = manager.getAllEpics();
                         System.out.println(epics);
                         break;
                     default:
@@ -102,7 +101,7 @@ public class Main {
                 // manager.deleteSubtaskById(subtask.getId());
             } else if (command == 7) {
                 System.out.println("Введите id");
-                ArrayList<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
+                List<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
                 System.out.println(subtasks);
             } else if (command == 8) {
                 List<Task> tasks = manager.getHistory();
