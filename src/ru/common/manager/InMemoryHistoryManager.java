@@ -15,7 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-        if (historyEntities.size() >= MAX_REQUESTED_ENTITIES ) {
+        if (historyEntities.size() >= MAX_REQUESTED_ENTITIES) {
             historyEntities.removeFirst();
         }
         historyEntities.add(task);
