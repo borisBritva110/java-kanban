@@ -1,7 +1,7 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import ru.common.manager.TaskManager;
+import ru.common.manager.InMemoryTaskManager;
 import ru.common.model.Epic;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
@@ -11,7 +11,7 @@ public class Main {
     private static final String ERROR_TEXT_MESSAGE = "Команда не найдена";
 
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
         Task task = new Task("Задача", "TEST1", TaskStatus.NEW);
         manager.createTask(task);
         Task task2 = new Task("Задача2", "TEST2", TaskStatus.NEW);
@@ -44,15 +44,15 @@ public class Main {
                 choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        ArrayList<Task> tasks = manager.getAllTasks();
+                        List<Task> tasks = manager.getAllTasks();
                         System.out.println(tasks);
                         break;
                     case 2:
-                        ArrayList<Subtask> subtasks = manager.getAllSubtasks();
+                        List<Subtask> subtasks = manager.getAllSubtasks();
                         System.out.println(subtasks);
                         break;
                     case 3:
-                        ArrayList<Epic> epics = manager.getAllEpics();
+                        List<Epic> epics = manager.getAllEpics();
                         System.out.println(epics);
                         break;
                     default:
@@ -80,6 +80,7 @@ public class Main {
                 Task taskById = manager.getTaskById(entityId);
                 // Subtask subtaskById = manager.getSubtaskById(entityId);
                 // Epic epicById = manager.getEpicById(entityId);
+                System.out.println(taskById);
             } else if (command == 4) {
                 System.out.println("Какой тип задачи необходимо создать? 1 - задача, 2 - подзадача, 3 - эпик");
                 Task task3 = new Task("Тестовая задача", "Просто задача", TaskStatus.DONE);
@@ -100,8 +101,11 @@ public class Main {
                 // manager.deleteSubtaskById(subtask.getId());
             } else if (command == 7) {
                 System.out.println("Введите id");
-                ArrayList<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
+                List<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
                 System.out.println(subtasks);
+            } else if (command == 8) {
+                List<Task> tasks = manager.getHistory();
+                System.out.println(tasks);
             }
         }
     }
@@ -115,5 +119,6 @@ public class Main {
         System.out.println("5 - Обновить задачу");
         System.out.println("6 - Удаление задачи по id");
         System.out.println("7 - Получить список подзадач для эпика");
+        System.out.println("8 - Получить историю запросов");
     }
 }

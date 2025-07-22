@@ -18,6 +18,15 @@ public class Epic extends Task {
         this.subtaskIds = subtaskIds;
     }
 
+    public void addSubtaskId(int subtaskId) {
+        if (subtaskIds == null) {
+            subtaskIds = new ArrayList<>();
+        }
+        if (subtaskId != this.getId()) {
+            subtaskIds.add(subtaskId);
+        }
+    }
+
     @Override
     public String getName() {
         return super.getName();
