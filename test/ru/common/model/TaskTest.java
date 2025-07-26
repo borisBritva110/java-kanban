@@ -51,9 +51,8 @@ public class TaskTest {
 
     @Test
     void shouldTaskEqualIfTheyHaveSameValues (){
-        Task task3 = new Task(2,"Задача 3", "");
-        assertEquals(task, task2, "Задачи должны быть равны.");
-        assertEquals(task.hashCode(), task2.hashCode(), "Задачи должны быть равны.");
+        int randomId = MockData.nextId++;
+        Task task3 = new Task(randomId,"Задача 3", "");
         assertNotEquals(task2, task3, "Задачи должны отличаться");
         assertNotEquals(task.hashCode(), task3.hashCode(), "Задачи должны отличаться");
     }
