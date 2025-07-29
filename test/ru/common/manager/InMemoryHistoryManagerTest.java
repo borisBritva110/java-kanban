@@ -100,4 +100,21 @@ public class InMemoryHistoryManagerTest {
         historyManager.remove(999);
         assertEquals(1, historyManager.getHistory().size());
     }
+
+    @Test
+    public void testTaskAddedToHistoryAndRemoved() {
+        Task task = MockData.createTask1();
+        Task createdTask = manager.createTask(task);
+        assertNotNull(createdTask, "Задача не создана");
+
+        Task retrievedTask = manager.getTaskById(createdTask.getId());
+        assertNotNull(retrievedTask, "Задача не найдена");
+        List<Task> historyAfterGet = manager.getHistory();
+        assertEquals(1, historyAfterGet.size(), "Количество элементов в истории не совпадает");
+        assertEquals(createdTask.getId(), historyAfterGet.get(0).getId(), "Задача в истории не совпадает с полученной");
+
+        manager.deleteTaskById(createdTask.getId());
+        List<Task> historyAfterDelete = manager.getHistory();
+        assertEquals(0, historyAfterDelete.size(), "После удаления задачи история должна быть очищена");
+    }
 }
