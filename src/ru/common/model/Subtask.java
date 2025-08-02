@@ -1,11 +1,28 @@
 package ru.common.model;
 
 public class Subtask extends Task {
+    private int id;
     private int epicId;
 
     public Subtask(int epicId, String name, String description, TaskStatus status) {
         super(name, description, status);
         this.epicId = epicId;
+    }
+
+    public Subtask(int id, int epicId, String name, String description, TaskStatus status) {
+        super(name, description, status);
+        this.id = id;
+        this.epicId = epicId;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getEpicId() {

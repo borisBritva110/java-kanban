@@ -9,6 +9,7 @@ import ru.common.model.Epic;
 import ru.common.model.MockData;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
+import ru.common.model.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,6 +31,7 @@ public class InMemoryHistoryManagerTest {
         task2 = MockData.createTask2();
         epic = MockData.createEpic();
         subTask = MockData.createSubTask(epic);
+        epic.addSubtaskId(subTask.getId());
     }
 
     @Test
@@ -56,7 +58,6 @@ public class InMemoryHistoryManagerTest {
         assertEquals(3, updatedHistory.size(), "Количество задач отличается.");
         assertEquals(updatedHistory.get(2).getId(), subTask.getId(), "Объекты не совпадают");
         assertEquals(updatedHistory.get(1).getId(), task2.getId(), "Объекты не совпадают");
-        assertEquals(updatedHistory.get(2).getId(), task1.getId(), "Объекты не совпадают");
     }
 
     @Test
@@ -64,16 +65,11 @@ public class InMemoryHistoryManagerTest {
         historyManager.add(task1);
         historyManager.add(subTask);
         historyManager.add(epic);
-
-        Task newTask = new Task(1, "Задача", "");
-        manager.createTask(newTask);
-        historyManager.add(newTask);
+        historyManager.add(task2);
 
         List<Task> history = historyManager.getHistory();
         assertNotNull(history, "В истории отсутствуют задачи.");
         assertEquals(4, history.size(), "Количество задач отличается.");
-
-        assertEquals(history.get(3).getId(), newTask.getId(), "Объекты не совпадают");
         assertEquals(history.get(0).getId(), task1.getId(), "Объекты не совпадают");
     }
 
@@ -83,8 +79,42 @@ public class InMemoryHistoryManagerTest {
         manager.createTask(task2);
 
         manager.getTaskById(task1.getId());
-        manager.getTaskById(task1.getId());
         manager.getTaskById(task2.getId());
-        assertEquals(3,  manager.getHistory().size(), "Количество задач отличается.");
+        assertEquals(2,  manager.getHistory().size(), "Количество задач отличается.");
+    }
+
+    @Test
+    public void testRemoveTaskFromHistory() {
+        historyManager.add(task1);
+        historyManager.add(task2);
+        assertEquals(2, historyManager.getHistory().size());
+
+        historyManager.remove(task1.getId());
+        assertEquals(1, historyManager.getHistory().size());
+        assertEquals(task2, historyManager.getHistory().get(0));
+    }
+
+    @Test
+    public void testRemoveNonExistentTask() {
+        historyManager.add(task1);
+        historyManager.remove(999);
+        assertEquals(1, historyManager.getHistory().size());
+    }
+
+    @Test
+    public void testTaskAddedToHistoryAndRemoved() {
+        Task task = MockData.createTask1();
+        Task createdTask = manager.createTask(task);
+        assertNotNull(createdTask, "Задача не создана");
+
+        Task retrievedTask = manager.getTaskById(createdTask.getId());
+        assertNotNull(retrievedTask, "Задача не найдена");
+        List<Task> historyAfterGet = manager.getHistory();
+        assertEquals(1, historyAfterGet.size(), "Количество элементов в истории не совпадает");
+        assertEquals(createdTask.getId(), historyAfterGet.get(0).getId(), "Задача в истории не совпадает с полученной");
+
+        manager.deleteTaskById(createdTask.getId());
+        List<Task> historyAfterDelete = manager.getHistory();
+        assertEquals(0, historyAfterDelete.size(), "После удаления задачи история должна быть очищена");
     }
 }
