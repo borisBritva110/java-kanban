@@ -12,24 +12,32 @@ public class Main {
 
     public static void main(String[] args) {
         InMemoryTaskManager manager = new InMemoryTaskManager();
-        Task task = new Task("Задача", "TEST1", TaskStatus.NEW);
-        manager.createTask(task);
-        Task task2 = new Task("Задача2", "TEST2", TaskStatus.NEW);
-        manager.createTask(task2);
+//        Path specificDirectory = Paths.get("/Users/m-imaeva/IdeaProjects/java-kanban/src");
+//        if (!Files.exists(specificDirectory)) {
+//            Files.createDirectories(specificDirectory);
+//        }
+//        Path file = Files.createTempFile(specificDirectory, "test", ".txt");
+//        TaskManager manager = Managers.getDefault(file);
+//        FileBackedTaskManager.loadFromFile(Path.of("/Users/m-imaeva/IdeaProjects/java-kanban/src/test7765899970439191474.txt"));
 
-        Epic epic = new Epic("Эпик5", "TEST5");
-        manager.createEpic(epic);
-        Epic epic2 = new Epic("Эпик6", "TEST6");
-        manager.createEpic(epic2);
-
-        Subtask subtask = new Subtask(epic.getId(), "Подзадача3", "TEST3", TaskStatus.NEW);
-        manager.createSubtask(subtask);
-
-        Subtask subtask2 = new Subtask(epic.getId(), "Подзадача4", "TEST4", TaskStatus.IN_PROGRESS);
-        manager.createSubtask(subtask2);
-
-        Subtask subtask3 = new Subtask(epic.getId(), "Подзадача", "TEST4", TaskStatus.NEW);
-        manager.createSubtask(subtask3);
+//        Task task = new Task("Задача", "TEST1", TaskStatus.NEW);
+//        manager.createTask(task);
+//        Task task2 = new Task("Задача2", "TEST2", TaskStatus.NEW);
+//        manager.createTask(task2);
+//
+//        Epic epic = new Epic("Эпик5", "TEST5");
+//        manager.createEpic(epic);
+//        Epic epic2 = new Epic("Эпик6", "TEST6");
+//        manager.createEpic(epic2);
+//
+//        Subtask subtask = new Subtask(epic.getId(), "Подзадача3", "TEST3", TaskStatus.NEW);
+//        manager.createSubtask(subtask);
+//
+//        Subtask subtask2 = new Subtask(epic.getId(), "Подзадача4", "TEST4", TaskStatus.IN_PROGRESS);
+//        manager.createSubtask(subtask2);
+//
+//        Subtask subtask3 = new Subtask(epic.getId(), "Подзадача", "TEST4", TaskStatus.NEW);
+//        manager.createSubtask(subtask3);
 
         printMenu();
 
@@ -92,17 +100,17 @@ public class Main {
             } else if (command == 5) {
                 System.out.println("Какого типа задачу необходимо отредактировать? 1 - задача, 2 - подзадача, 3 - эпик");
                 entityId = scanner.nextInt();
-                manager.updateTask(task, entityId);
+//                manager.updateTask(task, entityId);
                 // manager.updateEpic(epic, entityId);
                 // manager.updateSubtask(subtask, entityId);
             } else if (command == 6) {
-                 manager.deleteTaskById(task.getId());
+//                 manager.deleteTaskById(task.getId());
                 // manager.deleteEpicById(epic.getId());
                 // manager.deleteSubtaskById(subtask.getId());
             } else if (command == 7) {
                 System.out.println("Введите id");
-                List<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
-                System.out.println(subtasks);
+//                List<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);
+//                System.out.println(subtasks);
             } else if (command == 8) {
                 List<Task> tasks = manager.getHistory();
                 System.out.println(tasks);
