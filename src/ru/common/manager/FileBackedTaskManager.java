@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import ru.common.exception.ManagerSaveException;
 import ru.common.model.Epic;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
@@ -45,20 +46,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public static void loadFromFile(Path pathFile) {
+    public static FileBackedTaskManager loadFromFile(Path pathFile) {
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(pathFile);
         try (BufferedReader br = new BufferedReader(new FileReader(pathFile.toFile()))) {
             while (br.ready()) {
                 String line = br.readLine();
-                if (!line.isEmpty() && line != null) {
-                    fromString(line);
+                if (line != null && !line.isEmpty()) {
+                    Task task = fromString(line);
+                    if (task.getTaskType() == TaskType.TASK) {
+                        fileBackedTaskManager.tasks.put(task.getId(), task);
+                    } else if (task.getTaskType() == TaskType.SUBTASK) {
+                        fileBackedTaskManager.subtasks.put(task.getId(), (Subtask) task);
+                    } else if (task.getTaskType() == TaskType.EPIC) {
+                        fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                    }
                 }
             }
-
         } catch (FileNotFoundException exception) {
             exception.getStackTrace();
         } catch (IOException exception) {
             throw new ManagerSaveException("Ошибка при работе с файлом");
         }
+        return fileBackedTaskManager;
     }
 
     @Override
@@ -227,20 +236,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case taskType.TASK -> {
                 Task task = new Task(name, description, status);
                 task.setId(id);
-                System.out.println(task);
+                return task;
             }
 
             case taskType.EPIC -> {
                 Epic epic = new Epic(id, name, description, status);
                 epic.setId(id);
-                System.out.println(epic);
+                return epic;
             }
 
             case taskType.SUBTASK -> {
                 Subtask subtask = new Subtask(id, epicId, name, description, status);
                 subtask.setId(id);
-                System.out.println(subtask);
+                return subtask;
             }
+            default ->
+                System.out.println("Тип задачи не определен");
         }
         return null;
     }

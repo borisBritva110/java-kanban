@@ -1,4 +1,4 @@
-package ru.common.manager;
+package ru.common.exception;
 
 public class ManagerSaveException extends RuntimeException {
 
