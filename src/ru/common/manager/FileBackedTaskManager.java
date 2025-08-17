@@ -221,15 +221,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static Task fromString(String str) {
         String[] split = str.split(",");
-        int id = Integer.valueOf(split[0]);
-        String name = String.valueOf(split[1]);
-        TaskType taskType = TaskType.valueOf(split[2]);
-        TaskStatus status = TaskStatus.valueOf(split[3]);
-        String description = String.valueOf(split[4]);
-
+        int id = 0;
+        String name = "";
+        TaskType taskType = null;
+        TaskStatus status = null;
+        String description = "";
         Integer epicId = null;
-        if (taskType == TaskType.SUBTASK) {
-            epicId = Integer.valueOf(split[5]);
+
+        try {
+            id = Integer.parseInt(split[0]);
+            name = split[1];
+            taskType = TaskType.valueOf(split[2]);
+            status = TaskStatus.valueOf(split[3]);
+
+            if (split.length > 4) {
+                description = split[4];
+            }
+
+            if (taskType == TaskType.SUBTASK && split.length > 5) {
+                epicId = Integer.parseInt(split[5]);
+            }
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+            System.out.println("Ошибка при чтении задачи: " + str);
+            return null;
         }
 
         switch (taskType) {

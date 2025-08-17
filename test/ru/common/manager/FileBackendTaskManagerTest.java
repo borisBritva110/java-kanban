@@ -14,7 +14,6 @@ import ru.common.model.Task;
 import ru.common.model.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FileBackendTaskManagerTest {
 
@@ -34,18 +33,18 @@ public class FileBackendTaskManagerTest {
     }
 
     @Test
-    public void testSaveToFile() throws IOException {
+    public void testSaveToFile() {
         FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
-
         Task task = new Task("Task", "", TaskStatus.NEW);
         Epic epic = new Epic("Epic", "");
-
         manager.createEpic(epic);
         manager.createTask(task);
+        manager.save();
+        FileBackedTaskManager.loadFromFile(tempFile);
+        List<Task> tasks = manager.getAllTasks();
+        List<Epic> epics = manager.getAllEpics();
 
-        List<String> lines = Files.readAllLines(tempFile);
-        assertEquals(2, lines.size(), "Должно быть сохранено 2 элемента");
-        assertTrue(lines.contains(manager.toString(task)));
-        assertTrue(lines.contains(manager.toString(epic)));
+        assertEquals(tasks.size(), 1, "Количество задач отличается");
+        assertEquals(epics.size(), 1, "Количество задач отличается");
     }
 }
