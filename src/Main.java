@@ -30,7 +30,6 @@ public class Main {
 
         Subtask subtask3 = new Subtask(epic.getId(), "Подзадача", "TEST4", TaskStatus.NEW);
         manager.createSubtask(subtask3);
-
         printMenu();
 
         while (true) {
@@ -78,8 +77,6 @@ public class Main {
                 System.out.println("Введите id");
                 entityId = scanner.nextInt();
                 Task taskById = manager.getTaskById(entityId);
-                // Subtask subtaskById = manager.getSubtaskById(entityId);
-                // Epic epicById = manager.getEpicById(entityId);
                 System.out.println(taskById);
             } else if (command == 4) {
                 System.out.println("Какой тип задачи необходимо создать? 1 - задача, 2 - подзадача, 3 - эпик");
@@ -87,18 +84,12 @@ public class Main {
                 manager.createTask(task3);
                 Epic epic3 = new Epic("Тестовый эпик", "");
                 manager.createEpic(epic3);
-                // Subtask subtask3 = new Subtask(epic3.getId(), "Подзадача", "", TaskStatus.IN_PROGRESS);
-                // manager.createSubtask(subtask3);
             } else if (command == 5) {
                 System.out.println("Какого типа задачу необходимо отредактировать? 1 - задача, 2 - подзадача, 3 - эпик");
-                entityId = scanner.nextInt();
-                manager.updateTask(task, entityId);
-                // manager.updateEpic(epic, entityId);
-                // manager.updateSubtask(subtask, entityId);
             } else if (command == 6) {
                  manager.deleteTaskById(task.getId());
-                // manager.deleteEpicById(epic.getId());
-                // manager.deleteSubtaskById(subtask.getId());
+                 manager.deleteEpicById(epic.getId());
+                 manager.deleteSubtaskById(subtask.getId());
             } else if (command == 7) {
                 System.out.println("Введите id");
                 List<Subtask> subtasks = manager.getSubtasksFromEpic(epic2);

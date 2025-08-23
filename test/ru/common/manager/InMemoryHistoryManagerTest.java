@@ -25,7 +25,7 @@ public class InMemoryHistoryManagerTest {
 
     @BeforeEach
     void setUp() {
-        this.manager = Managers.getDefault();
+        this.manager = new InMemoryTaskManager();
         this.historyManager = Managers.getDefaultHistory();
         task1 = MockData.createTask1();
         task2 = MockData.createTask2();

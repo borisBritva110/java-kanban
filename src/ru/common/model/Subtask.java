@@ -62,4 +62,9 @@ public class Subtask extends Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         super.setTaskStatus(taskStatus);
     }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.SUBTASK;
+    }
 }
