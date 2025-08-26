@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import ru.common.exception.ManagerSaveException;
@@ -53,12 +56,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 if (line != null && !line.isEmpty()) {
                     Task task = fromString(line);
-                    if (task.getTaskType() == TaskType.TASK) {
-                        fileBackedTaskManager.tasks.put(task.getId(), task);
-                    } else if (task.getTaskType() == TaskType.SUBTASK) {
-                        fileBackedTaskManager.subtasks.put(task.getId(), (Subtask) task);
-                    } else if (task.getTaskType() == TaskType.EPIC) {
-                        fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                    if (task != null) {
+                        if (task.getTaskType() == TaskType.TASK) {
+                            fileBackedTaskManager.tasks.put(task.getId(), task);
+                        } else if (task.getTaskType() == TaskType.SUBTASK) {
+                            fileBackedTaskManager.subtasks.put(task.getId(), (Subtask) task);
+                        } else if (task.getTaskType() == TaskType.EPIC) {
+                            fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                        }
                     }
                 }
             }
@@ -212,6 +217,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         stringBuilder.append(task.getTaskType()).append(DELIMITER);
         stringBuilder.append(task.getTaskStatus()).append(DELIMITER);
         stringBuilder.append(task.getDescription()).append(DELIMITER);
+        long duration = task.getDuration() != null ? task.getDuration().toMinutes() : 0;
+        stringBuilder.append(duration).append(DELIMITER);
+        String time = task.getStartTime() != null ? task.getDuration().toString() : null;
+        stringBuilder.append(time).append(DELIMITER);
         if (task.getTaskType() == TaskType.SUBTASK) {
             Subtask subtask = (Subtask) task;
             stringBuilder.append(subtask.getEpicId());
@@ -227,21 +236,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskStatus status = null;
         String description = "";
         Integer epicId = null;
+        LocalDateTime startTime = null;
+        Duration duration = Duration.ZERO;
 
         try {
             id = Integer.parseInt(split[0]);
             name = split[1];
             taskType = TaskType.valueOf(split[2]);
             status = TaskStatus.valueOf(split[3]);
+            startTime = split.length > 5 && !split[5].isEmpty() ? LocalDateTime.parse(split[5]) : null;
+            duration = Duration.ofMinutes(Long.parseLong(split[6]));
 
             if (split.length > 4) {
                 description = split[4];
             }
 
             if (taskType == TaskType.SUBTASK && split.length > 5) {
-                epicId = Integer.parseInt(split[5]);
+                epicId = Integer.parseInt(split[7]);
             }
-        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException | DateTimeParseException e) {
             System.out.println("Ошибка при чтении задачи: " + str);
             return null;
         }
@@ -254,13 +267,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
             case taskType.EPIC -> {
-                Epic epic = new Epic(id, name, description, status);
+                Epic epic = new Epic(id, name, description, status, startTime, duration);
                 epic.setId(id);
                 return epic;
             }
 
             case taskType.SUBTASK -> {
-                Subtask subtask = new Subtask(id, epicId, name, description, status);
+                Subtask subtask = new Subtask(id, name, description, status, startTime, duration, epicId);
                 subtask.setId(id);
                 return subtask;
             }

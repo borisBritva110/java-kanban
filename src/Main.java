@@ -1,3 +1,5 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,9 +14,11 @@ public class Main {
 
     public static void main(String[] args) {
         InMemoryTaskManager manager = new InMemoryTaskManager();
-        Task task = new Task("Задача", "TEST1", TaskStatus.NEW);
+        LocalDateTime time = LocalDateTime.now().minusDays(2);
+        Duration duration = Duration.ofMinutes(15);
+        Task task = new Task("Задача", "TEST1", TaskStatus.NEW, time, duration);
         manager.createTask(task);
-        Task task2 = new Task("Задача2", "TEST2", TaskStatus.NEW);
+        Task task2 = new Task("Задача2", "TEST2", TaskStatus.NEW, time, duration);
         manager.createTask(task2);
 
         Epic epic = new Epic("Эпик5", "TEST5");
@@ -22,13 +26,13 @@ public class Main {
         Epic epic2 = new Epic("Эпик6", "TEST6");
         manager.createEpic(epic2);
 
-        Subtask subtask = new Subtask(epic.getId(), "Подзадача3", "TEST3", TaskStatus.NEW);
+        Subtask subtask = new Subtask("Подзадача3", "TEST3", TaskStatus.NEW, time, duration, epic.getId());
         manager.createSubtask(subtask);
 
-        Subtask subtask2 = new Subtask(epic.getId(), "Подзадача4", "TEST4", TaskStatus.IN_PROGRESS);
+        Subtask subtask2 = new Subtask("Подзадача4", "TEST4", TaskStatus.IN_PROGRESS, time, duration, epic.getId());
         manager.createSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask(epic.getId(), "Подзадача", "TEST4", TaskStatus.NEW);
+        Subtask subtask3 = new Subtask( "Подзадача", "TEST4", TaskStatus.NEW, time, duration, epic.getId());
         manager.createSubtask(subtask3);
         printMenu();
 
@@ -80,7 +84,7 @@ public class Main {
                 System.out.println(taskById);
             } else if (command == 4) {
                 System.out.println("Какой тип задачи необходимо создать? 1 - задача, 2 - подзадача, 3 - эпик");
-                Task task3 = new Task("Тестовая задача", "Просто задача", TaskStatus.DONE);
+                Task task3 = new Task("Тестовая задача", "Просто задача", TaskStatus.DONE, time, duration);
                 manager.createTask(task3);
                 Epic epic3 = new Epic("Тестовый эпик", "");
                 manager.createEpic(epic3);

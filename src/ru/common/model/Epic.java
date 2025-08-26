@@ -1,24 +1,26 @@
 package ru.common.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private int id;
     private ArrayList<Integer> subtaskIds;
+    private LocalDateTime endTime;
 
-    public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
+    public Epic(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration) {
+        super(id, name, description, status, startTime, duration);
         subtaskIds = new ArrayList<>();
     }
 
     public Epic(int id, String name, String description) {
-        super(name, description, TaskStatus.NEW);
-        this.id = id;
+        super(id, name, description, TaskStatus.NEW);
         subtaskIds = new ArrayList<>();
     }
 
-    public Epic(int id, String name, String description, TaskStatus taskStatus) {
-        super(id, name, description, taskStatus);
+    public Epic(String name, String description) {
+        this(GENERATED_ID, name, description);
     }
 
     @Override
@@ -81,5 +83,14 @@ public class Epic extends Task {
     @Override
     public TaskType getTaskType() {
         return TaskType.EPIC;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 }
