@@ -32,7 +32,7 @@ public class Main {
         Subtask subtask2 = new Subtask("Подзадача4", "TEST4", TaskStatus.IN_PROGRESS, time, duration, epic.getId());
         manager.createSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask( "Подзадача", "TEST4", TaskStatus.NEW, time, duration, epic.getId());
+        Subtask subtask3 = new Subtask("Подзадача", "TEST4", TaskStatus.NEW, time, duration, epic.getId());
         manager.createSubtask(subtask3);
         printMenu();
 
