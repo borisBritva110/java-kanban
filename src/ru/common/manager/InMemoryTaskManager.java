@@ -308,13 +308,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void updateEpicTimeFields(Epic epic, List<Subtask> sortedSubtask) {
+        if (sortedSubtask.isEmpty()) {
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setDuration(Duration.ZERO);
+            return;
+        }
         epic.setStartTime(sortedSubtask.getFirst().getStartTime());
         epic.setEndTime(sortedSubtask.getLast().getEndTime());
-        Duration totalDuration = Duration.ZERO;
-        for (Task t : sortedSubtask) {
-            totalDuration = totalDuration.plus(t.getDuration());
+
+        if (epic.getStartTime() != null && epic.getEndTime() != null) {
+            Duration epicDuration = Duration.between(epic.getStartTime(), epic.getEndTime());
+            epic.setDuration(epicDuration);
+        } else {
+            epic.setDuration(Duration.ZERO);
         }
-        epic.setDuration(totalDuration);
     }
 
     @Override
@@ -335,13 +343,19 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         LocalDateTime timeTaskFinished = task.getEndTime();
-        long count = prioritizedTasks.stream()
-            .filter(t -> timeTaskStarted.isBefore(t.getEndTime()) || timeTaskFinished.isAfter(t.getStartTime()))
-            .count();
+        for (Task existingTask : prioritizedTasks) {
+            if (existingTask.getStartTime() == null || existingTask.getEndTime() == null) {
+                continue;
+            }
+            LocalDateTime existingStart = existingTask.getStartTime();
+            LocalDateTime existingEnd = existingTask.getEndTime();
+            boolean isIntersected = timeTaskStarted.isBefore(existingEnd) &&
+                timeTaskFinished.isAfter(existingStart);
 
-        if (count == 0 && prioritizedTasks.size() == 0) {
-            return false;
+            if (isIntersected) {
+                return true;
+            }
         }
-        return count != prioritizedTasks.size();
+        return false;
     }
 }

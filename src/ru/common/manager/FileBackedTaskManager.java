@@ -219,8 +219,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         stringBuilder.append(task.getDescription()).append(DELIMITER);
         long duration = task.getDuration() != null ? task.getDuration().toMinutes() : 0;
         stringBuilder.append(duration).append(DELIMITER);
-        String time = task.getStartTime() != null ? task.getDuration().toString() : null;
-        stringBuilder.append(time).append(DELIMITER);
+        String startTime = task.getStartTime() != null ? task.getStartTime().toString() : "null";
+        stringBuilder.append(startTime).append(DELIMITER);
+
         if (task.getTaskType() == TaskType.SUBTASK) {
             Subtask subtask = (Subtask) task;
             stringBuilder.append(subtask.getEpicId());
@@ -244,8 +245,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             name = split[1];
             taskType = TaskType.valueOf(split[2]);
             status = TaskStatus.valueOf(split[3]);
-            startTime = split.length > 5 && !split[5].isEmpty() ? LocalDateTime.parse(split[5]) : null;
-            duration = Duration.ofMinutes(Long.parseLong(split[6]));
+            duration = Duration.ofMinutes(Long.parseLong(split[5]));
+            startTime = split.length > 6 && !"null".equals(split[6]) ? LocalDateTime.parse(split[6]) : null;
 
             if (split.length > 4) {
                 description = split[4];
@@ -261,7 +262,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         switch (taskType) {
             case taskType.TASK -> {
-                Task task = new Task(name, description, status);
+                Task task = new Task(name, description, status, startTime, duration);
                 task.setId(id);
                 return task;
             }
