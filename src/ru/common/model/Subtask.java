@@ -1,18 +1,25 @@
 package ru.common.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int id;
     private int epicId;
 
-    public Subtask(int epicId, String name, String description, TaskStatus status) {
-        super(name, description, status);
+    public Subtask(int id, String name, String description, TaskStatus status,
+                   LocalDateTime startTime, Duration duration, int epicId) {
+        super(id, name, description, status, startTime, duration);
         this.epicId = epicId;
     }
 
-    public Subtask(int id, int epicId, String name, String description, TaskStatus status) {
-        super(name, description, status);
-        this.id = id;
-        this.epicId = epicId;
+    public Subtask(String name, String description, TaskStatus status,
+                   LocalDateTime startTime, Duration duration, int epicId) {
+        this(GENERATED_ID, name, description, status, startTime, duration, epicId);
+    }
+
+    public Subtask(String name, String description, TaskStatus status, int epicId) {
+        this(GENERATED_ID, name, description, status, null, Duration.ZERO, epicId);
     }
 
     @Override

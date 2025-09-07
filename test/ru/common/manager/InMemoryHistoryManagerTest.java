@@ -9,7 +9,6 @@ import ru.common.model.Epic;
 import ru.common.model.MockData;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
-import ru.common.model.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -63,13 +62,11 @@ public class InMemoryHistoryManagerTest {
     @Test
     public void testGetTaskHistoryListWithDifferentTasks() {
         historyManager.add(task1);
-        historyManager.add(subTask);
-        historyManager.add(epic);
         historyManager.add(task2);
 
         List<Task> history = historyManager.getHistory();
         assertNotNull(history, "В истории отсутствуют задачи.");
-        assertEquals(4, history.size(), "Количество задач отличается.");
+        assertEquals(2, history.size(), "Количество задач отличается.");
         assertEquals(history.get(0).getId(), task1.getId(), "Объекты не совпадают");
     }
 

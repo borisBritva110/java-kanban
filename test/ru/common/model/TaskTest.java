@@ -1,5 +1,6 @@
 package ru.common.model;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +53,7 @@ public class TaskTest {
     @Test
     void shouldTaskEqualIfTheyHaveSameValues (){
         int randomId = MockData.nextId++;
-        Task task3 = new Task(randomId,"Задача 3", "");
+        Task task3 = new Task(randomId,"Задача 3", "", TaskStatus.NEW);
         assertNotEquals(task2, task3, "Задачи должны отличаться");
         assertNotEquals(task.hashCode(), task3.hashCode(), "Задачи должны отличаться");
     }
@@ -62,5 +63,16 @@ public class TaskTest {
         task.setId(1);
         task2.setId(2);
         assertNotEquals(task, task2, "Задачи должны отличаться");
+    }
+
+    @Test
+    void isTaskIntersected() {
+        manager.createTask(task);
+        manager.createTask(task2);
+
+        Task candidate = new Task("Task", "Описание", TaskStatus.NEW, null, Duration.ofMinutes(15));
+
+        boolean intersected = manager.isTaskIntersected(candidate);
+        assertFalse(intersected, "Задача без начала времени не должна пересекаться с существующими задачами");
     }
 }
