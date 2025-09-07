@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import ru.common.exception.InteractionsException;
+import ru.common.exception.NotFoundException;
 import ru.common.manager.TaskManager;
 import ru.common.model.Epic;
 
@@ -15,21 +17,29 @@ public class EpicHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        System.out.println("Началась обработка " + method + " /epics запроса от клиента.");
+        try {
+            String method = exchange.getRequestMethod();
+            System.out.println("Началась обработка " + method + " /epics запроса от клиента.");
 
-        switch(method) {
-            case "POST":
-                handlePost(exchange);
-                break;
-            case "GET":
-                handleGet(exchange);
-                break;
-            case "DELETE":
-                handleDelete(exchange);
-                break;
-            default:
-                sendBadRequest(exchange, "Метод не поддерживается");
+            switch (method) {
+                case "POST":
+                    handlePost(exchange);
+                    break;
+                case "GET":
+                    handleGet(exchange);
+                    break;
+                case "DELETE":
+                    handleDelete(exchange);
+                    break;
+                default:
+                    sendBadRequest(exchange, "Метод не поддерживается");
+            }
+        } catch(NotFoundException e){
+            sendNotFound(exchange, e.getMessage());
+        } catch(InteractionsException e){
+            sendInteractions(exchange, e.getMessage());
+        } catch(Exception e){
+            sendInternalError(exchange, "Внутренняя ошибка сервера: " + e.getMessage());
         }
     }
 

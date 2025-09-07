@@ -4,6 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.util.Optional;
 
+import ru.common.exception.InteractionsException;
+import ru.common.exception.NotFoundException;
 import ru.common.manager.TaskManager;
 import ru.common.model.Subtask;
 
@@ -31,8 +33,12 @@ public class SubtaskHandler extends BaseHttpHandler {
                 default:
                     sendBadRequest(exchange, "Метод не поддерживается");
             }
+        } catch (NotFoundException e) {
+            sendNotFound(exchange, e.getMessage());
+        } catch (InteractionsException e) {
+            sendInteractions(exchange, e.getMessage());
         } catch (Exception e) {
-            sendInternalError(exchange, "Внутренняя ошибка сервера");
+            sendInternalError(exchange, "Внутренняя ошибка сервера: " + e.getMessage());
         }
     }
 
