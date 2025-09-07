@@ -34,11 +34,11 @@ public class EpicHandler extends BaseHttpHandler {
                 default:
                     sendBadRequest(exchange, "Метод не поддерживается");
             }
-        } catch(NotFoundException e){
+        } catch (NotFoundException e) {
             sendNotFound(exchange, e.getMessage());
-        } catch(InteractionsException e){
+        } catch (InteractionsException e) {
             sendInteractions(exchange, e.getMessage());
-        } catch(Exception e){
+        } catch (Exception e) {
             sendInternalError(exchange, "Внутренняя ошибка сервера: " + e.getMessage());
         }
     }
