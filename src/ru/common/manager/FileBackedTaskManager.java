@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import ru.common.exception.InteractionsException;
 import ru.common.exception.ManagerSaveException;
+import ru.common.exception.NotFoundException;
 import ru.common.model.Epic;
 import ru.common.model.Subtask;
 import ru.common.model.Task;
@@ -97,21 +99,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public Task getTaskById(int id) throws NotFoundException {
         Task task = super.getTaskById(id);
         save();
         return task;
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
-        Subtask subtask =  super.getSubtaskById(id);
+    public Subtask getSubtaskById(int id) throws NotFoundException {
+        Subtask subtask = super.getSubtaskById(id);
         save();
         return subtask;
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public Epic getEpicById(int id) throws NotFoundException {
         Epic epic = super.getEpicById(id);
         save();
         return epic;
@@ -136,58 +138,58 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void deleteTaskById(int id) {
+    public void deleteTaskById(int id) throws NotFoundException {
         super.deleteTaskById(id);
         save();
     }
 
     @Override
-    public void deleteSubtaskById(int id) {
+    public void deleteSubtaskById(int id) throws NotFoundException {
         super.deleteSubtaskById(id);
         save();
     }
 
     @Override
-    public void deleteEpicById(int id) {
+    public void deleteEpicById(int id) throws NotFoundException {
         super.deleteEpicById(id);
         save();
     }
 
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(Task task)  throws InteractionsException {
         Task newTask = super.createTask(task);
         save();
         return newTask;
     }
 
     @Override
-    public Subtask createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask)  throws InteractionsException {
         Subtask newSubtask = super.createSubtask(subtask);
         save();
         return newSubtask;
     }
 
     @Override
-    public Epic createEpic(Epic epic) {
+    public Epic createEpic(Epic epic) throws InteractionsException {
         Epic newEpic = super.createEpic(epic);
         save();
         return newEpic;
     }
 
     @Override
-    public void updateTask(Task newtTask, int id) {
+    public void updateTask(Task newtTask, int id) throws NotFoundException, InteractionsException {
         super.updateTask(newtTask, id);
         save();
     }
 
     @Override
-    public void updateSubtask(Subtask newSubtask, int id) {
+    public void updateSubtask(Subtask newSubtask, int id) throws NotFoundException, InteractionsException {
         super.updateSubtask(newSubtask, id);
         save();
     }
 
     @Override
-    public void updateEpic(Epic newEpic, int id) {
+    public void updateEpic(Epic newEpic, int id) throws NotFoundException, InteractionsException {
         super.updateEpic(newEpic, id);
         save();
     }
